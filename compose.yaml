@@ -14,6 +14,7 @@ services:
         hostname: sql
         container_name: mssqlIpad
         image: mcr.microsoft.com/mssql/server:2022-latest
+        user: root
         ports:
             - "1433:1433"
         restart: always
@@ -21,3 +22,7 @@ services:
             - ACCEPT_EULA=Y
             - MSSQL_SA_PASSWORD=BratwurstIN23!
             - MSSQL_PID=Developer
+        volumes:
+            - /data:/var/opt/mssql/data
+            - /log:/var/opt/mssql/log
+            - /secrets:/var/opt/mssql/secrets
