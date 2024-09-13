@@ -1,5 +1,3 @@
-version: '1'
-
 services: 
     web:
         hostname: web
@@ -9,9 +7,8 @@ services:
         - ./webserver_data/:/var/www/html
         ports:
             - "80:80"
-            
         environment: 
-             WEB_DOCUMENT_ROOT: /var/www/html
+            WEB_DOCUMENT_ROOT: /var/www/html
 
     database:
         hostname: sql
@@ -23,7 +20,4 @@ services:
         environment:
             - ACCEPT_EULA=Y
             - MSSQL_SA_PASSWORD=BratwurstIN23!
-        volumes:
-            - ./data:/var/opt/mssql/data
-            - ./log:/var/opt/mssql/log
-            - ./secrets:/var/opt/mssql/secrets
+            - MSSQL_PID=Developer
