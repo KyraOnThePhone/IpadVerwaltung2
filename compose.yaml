@@ -1,0 +1,29 @@
+version: '1'
+
+services: 
+    web:
+        hostname: web
+        container_name: ipadWeb
+        image: webdevops/php-apache
+        volumes:
+        - ./webserver_data/:/var/www/html
+        ports:
+            - "80:80"
+            
+        environment: 
+             WEB_DOCUMENT_ROOT: /var/www/html
+
+    database:
+        hostname: sql
+        container_name: mssqlIpad
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        ports:
+            - "1433:1433"
+        restart: always
+        environment:
+            - ACCEPT_EULA=Y
+            - MSSQL_SA_PASSWORD=BratwurstIN23!
+        volumes:
+            - ./data:/var/opt/mssql/data
+            - ./log:/var/opt/mssql/log
+            - ./secrets:/var/opt/mssql/secrets
