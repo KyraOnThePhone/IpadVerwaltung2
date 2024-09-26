@@ -21,7 +21,7 @@ git commit -m "<Änderungen>"
 git push
 
 
-Datenbank aufrufen:
+Datenbank aufrufen (Dockercontainer muss dafür aktiv sein):
 1. Database Client JDBC Extension in VS Code herunterladen
 2. Auf das Datenbanken Symbol links in der Leiste klicken (wird bei ssh Verbindungen in VS Code häufig nicht angezeigt)
 3. folgende Dinge angeben:
