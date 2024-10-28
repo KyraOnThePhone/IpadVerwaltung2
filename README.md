@@ -7,6 +7,7 @@ Wie setzt man das Projekt auf:
 https://1drv.ms/w/c/eef3a3deb2781862/ETaA5KX1KKhApoJaCT64jOQBlDRwmghd0m05cJAsn-8TBA?e=CJiA2z
 
 Doku:
+https://1drv.ms/w/c/eef3a3deb2781862/EZ97EDrJ_kJJo12gtWMzGH0BwQK0Zr289wlcBTUIgQgAFg?e=QQEZtg
 
 Container aufbauen (Docker muss installiert sein):
 1. gehe in den Pfad, in dem die Datei compose.yaml liegt. (cd <Pfad>)
