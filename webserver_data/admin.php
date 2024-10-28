@@ -13,10 +13,11 @@
 
 
             <nav>
-                <div class="nav-wrapper deep-purple darken-3 white-text">
-                  <a href="#!" class="brand-logo white-text"><i class="material-icons">tablet_mac</i>IPad Verwaltung</a>
-                  <ul class="right hide-on-med-and-down white-text">
-                    <li><a class="white-text" href="login.html"><i class="material-icons left">account_box</i>Login</a></li>
+                <div class="nav-wrapper deep-purple darken-3 ">
+                  <a href="#!" class="brand-logo"><i class="material-icons">tablet_mac</i>IPad Verwaltung</a>
+                  <ul class="right hide-on-med-and-down">
+                    <li><i class="material-icons">account_box</i></li>
+                    <li><a href="badges.html">Login</a></li>
                 </div>
               </nav>
         </header>

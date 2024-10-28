@@ -8,20 +8,21 @@
         <link rel="stylesheet" href="style.css">
 
     </head>
-    <body>
+    <body class="loginbody">
         <header>
 
 
-            <nav>
-                <div class="nav-wrapper deep-purple darken-3 white-text">
-                  <a href="#!" class="brand-logo white-text"><i class="material-icons">tablet_mac</i>IPad Verwaltung</a>
-                  <ul class="right hide-on-med-and-down white-text">
-                    <li><a class="white-text" href="login.html"><i class="material-icons left">account_box</i>Login</a></li>
-                </div>
-              </nav>
         </header>
         <main>
-            <img src="fancy.gif" alt="Fancy Image">
+            <div class="formcontainer">
+                <form action="login.php" method="POST">
+                    <label for="uname">Username</label>
+                    <input type="text" id="uname" name="uname" required>
+                    <label for="pw">Passwort</label>
+                    <input type="password" id="pw" name="pw" required>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
         </main>
         <footer>
 
