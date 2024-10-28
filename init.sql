@@ -8,10 +8,9 @@ BEGIN
     CREATE DATABASE Login;
 END
 
--- Wechseln zur Datenbank IPadVerwaltung
-USE IPadVerwaltung;
+USE Login;
 
--- Erstellen der Tabelle Accounts, falls sie nicht existiert
+
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE name = 'Accounts' AND type = 'U')
 BEGIN
     CREATE TABLE Accounts (
@@ -21,6 +20,11 @@ BEGIN
     );
 END
 
--- Einfügen eines Benutzers in die Accounts-Tabelle
+
+IF NOT EXISTS (SELECT * FROM Accounts WHERE username= 'IN23')
+BEGIN
 INSERT INTO Accounts (username, password)
 VALUES ('IN23','$2y$10$MWYm7RKEVJ8Us7S1S4j/n.l4yEDQzytDMH15PCFT0YZvYGc7nqUnC');
+END
+
+USE IPadVerwaltung;
