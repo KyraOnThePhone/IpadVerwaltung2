@@ -2,9 +2,12 @@ services:
     web:
         hostname: web
         container_name: ipadWeb
-        image: webdevops/php-apache
+        build:
+             dockerfile: php/Dockerfile
+
         volumes:
         - ./webserver_data/:/var/www/html
+
         ports:
             - "80:80"
         environment: 
@@ -24,7 +27,10 @@ services:
             - ACCEPT_EULA=Y
             - MSSQL_SA_PASSWORD=BratwurstIN23!
             - MSSQL_PID=Developer
+
         volumes:
             - /mssql-data:/var/opt/mssql
             - ./init.sql:/init.sql
+
         command: /bin/bash -c "/opt/mssql/bin/sqlservr & sleep 30s && /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'BratwurstIN23!' -d master -i /init.sql & sleep infinity"
+  
