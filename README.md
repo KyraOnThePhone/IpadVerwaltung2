@@ -17,6 +17,14 @@ Container aufbauen (Docker muss installiert sein):
 1. gehe in den Pfad, in dem die Datei compose.yaml liegt. (cd <Pfad>)
 2. gebe folgenden Befehl an: sudo docker compose up -d
 
+Troubleshoot sqlsrv & php :
+nano /etc/php83/ini.php
+folgendes einfügen:
+extension_dir = "/usr/local/lib/php/extensions/no-debug-non-zts-20230831"
+schließen mit strg+s und strg+x
+cp /usr/local/etc/php/conf.d/docker-php-ext-pdo_sqlsrv.ini /etc/php83/conf.d
+cp /usr/local/etc/php/conf.d/docker-php-ext-sqlsrv.ini /etc/php83/conf.d
+httpd -k restart
 
 SQL Code:
 Bitte auch in init.sql übernehmen

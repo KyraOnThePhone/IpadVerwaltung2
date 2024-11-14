@@ -3,10 +3,11 @@ services:
         hostname: web
         container_name: ipadWeb
         build:
-             dockerfile: php/Dockerfile
+            dockerfile: php/Dockerfile
 
         volumes:
-        - ./webserver_data/:/var/www/html
+        - ./webserver_data/:/var/www/localhost/htdocs/
+        #- /phpConf/:/etc/php83 
 
         ports:
             - "80:80"
@@ -31,6 +32,7 @@ services:
         volumes:
             - /mssql-data:/var/opt/mssql
             - ./init.sql:/init.sql
+
 
         command: /bin/bash -c "/opt/mssql/bin/sqlservr & sleep 30s && /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'BratwurstIN23!' -d master -i /init.sql & sleep infinity"
   

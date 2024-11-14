@@ -1,27 +1,34 @@
 <?php
 error_reporting(E_ALL);
+
 ini_set('display_errors', 1);
-echo 'test';
 session_start();
-$serverName = "serverName\\sqlexpress, 1433"; 
-$connectionInfo = array( "Database"=>"login", "UID"=>"sa", "PWD"=>"BratwurstIN23!");
+session_regenerate_id();
+
+$serverName = "sql, 1433"; 
+$connectionInfo = array(
+    "Database" => "Login",
+    "UID" => "sa",
+    "PWD" => "BratwurstIN23!",
+    "TrustServerCertificate" => true // Zertifikat ignorieren
+);
 $conn = sqlsrv_connect($serverName, $connectionInfo);
-echo 'test2';
+
+
 
 if ($conn === false) {
-    echo 'test3';
     die(print_r(sqlsrv_errors(), true));
     
 }
 
-$sql = "SELECT id, password FROM Login WHERE username = ?";
+$sql = "SELECT id, password FROM Accounts WHERE username = ?";
 $params = array($_POST['uname']);
 $stmt = sqlsrv_query($conn, $sql, $params);
-echo 'test4';
+
 
 
 if ($stmt === false) {
-    echo 'test5';
+   
 
     die(print_r(sqlsrv_errors(), true));
 }
