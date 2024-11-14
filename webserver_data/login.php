@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 
 ini_set('display_errors', 1);
 session_start();
-session_regenerate_id();
+
 
 $serverName = "sql, 1433"; 
 $connectionInfo = array(
@@ -44,7 +44,7 @@ if (sqlsrv_has_rows($stmt)) {
         $_SESSION['name'] = $_POST['uname'];
         $_SESSION['id'] = $id;
         header('Location: admin.php');
-        exit;
+        
     } else {
         echo 'Passwort Stimmt nicht mit dem Username überein';
     }
