@@ -41,9 +41,9 @@ if (!isset($_SESSION['loggedin'])) {
                 <li class="tab col s3"><a href="#test-swipe-3">Datei Upload</a></li>
             </ul>
 
-            <div id="test-swipe-1" class="col s12 blue white-text swipeTabs">Test 1 Inhalt</div>
-            <div id="test-swipe-2" class="col s12 red white-text swipeTabs">Test 2 Inhalt</div>
-            <div id="test-swipe-3" class="col s12 green white-text swipeTabs">Test 3 Inhalt</div>
+            <div id="test-swipe-1" class="col s12 deep-purple lighten-4 white-text swipeTabs">Test 1 Inhalt</div>
+            <div id="test-swipe-2" class="col s12 deep-purple lighten-4 white-text swipeTabs">Test 2 Inhalt</div>
+            <div id="test-swipe-3" class="col s12 deep-purple lighten-4 white-text swipeTabs">Test 3 Inhalt</div>
         </div>
     </div>
 </main>
