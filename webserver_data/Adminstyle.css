@@ -6,7 +6,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 76vh; /* Reduziert auf 80% der Höhe */
+    min-height: 86.5vh; /* Reduziert auf 80% der Höhe */
 }
 
 .tabs .tab a {
