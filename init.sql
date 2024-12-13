@@ -182,6 +182,8 @@ INSERT INTO SchuelerMerge (ID, Klasse, Nachname, Vorname, Geburtsdatum, Geschlec
 (1029, '10B', 'Smith', 'Oliver', '2006-09-18', 'm', 'Fichtestraße 29', 27576, 'Bremerhaven', 'Hoffmann', 10),
 (1030, '10B', 'Meier', 'Clara', '2006-04-11', 'w', 'Schillerstraße 16', 27568, 'Bremerhaven', 'Hoffmann', 10);
 
+GO
+
 INSERT INTO dbo.TabletMerge (ItemID, Modell, Zubehoer, Notiz, Status, Zustand) VALUES
 (1, 'iPad Air', 'Zubehör X', '', 'Verliehen', 'gut'),
 (2, 'iPad Pro', 'Zubehör Y', '', 'Im Lager', 'gebraucht'),
@@ -234,6 +236,8 @@ INSERT INTO dbo.TabletMerge (ItemID, Modell, Zubehoer, Notiz, Status, Zustand) V
 (49, 'iPad Air', 'Zubehör Z', '', 'Verliehen', 'gut'),
 (50, 'iPad Pro', NULL, '', 'Im Lager', 'gebraucht');
 
+GO
+
 INSERT INTO dbo.AusgabeMerge (SchuelerID, TabletID, [Ausgabe am], [Geplante Abgabe], Abgabe) VALUES
 (1001, 5, '2023-01-10', '2023-01-20', '2023-01-22'),
 (1002, 7, '2023-02-15', '2023-03-01', '2023-03-05'),
@@ -269,6 +273,8 @@ INSERT INTO dbo.AusgabeMerge (SchuelerID, TabletID, [Ausgabe am], [Geplante Abga
 (1009, 17, '2023-09-05', '2023-09-15', '2023-09-18'),
 (1010, 19, '2023-10-07', '2023-10-17', '2023-10-20'),
 (1011, 21, '2023-11-02', '2023-11-12', '2023-11-15');
+
+GO
 
 CREATE OR ALTER     PROCEDURE [dbo].[Schueler_Merge]
 AS
