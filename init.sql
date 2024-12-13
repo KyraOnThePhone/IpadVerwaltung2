@@ -382,6 +382,24 @@ END
 
 GO 
 
+ CREATE OR ALTER     PROCEDURE [dbo].[TabletZustandKlasse]
+(@TZustand varchar(50), @Klasse varchar(50))
+AS
+BEGIN
+SET NOCOUNT ON
+ 
+SELECT dbo.Tablet.ItemID as 'TabletID', dbo.Tablet.Modell, dbo.Tablet.Notiz, dbo.Tablet.Zustand, dbo.Tablet.Zubehoer, dbo.Schueler.Klasse
+FROM  dbo.Ausgabe INNER JOIN
+                         dbo.Schueler ON dbo.Ausgabe.SchuelerID = dbo.Schueler.PNr INNER JOIN
+                         dbo.Tablet ON dbo.Ausgabe.TabletID = dbo.Tablet.ItemID
+
+WHERE dbo.Tablet.Zustand=@TZustand AND dbo.Schueler.Klasse=@Klasse
+ 
+END
+
+
+GO
+
 Create OR ALTER       PROCEDURE [dbo].[TSL]
 (@TID int)
 AS
