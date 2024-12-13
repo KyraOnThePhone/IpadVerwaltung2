@@ -458,3 +458,30 @@ END
 
 GO
 
+ CREATE OR ALTER     PROCEDURE [dbo].[TabletAnzeige]
+AS
+BEGIN
+SET NOCOUNT ON
+ 
+SELECT dbo.Tablet.ItemID as 'TabletID', dbo.Tablet.Modell, dbo.Tablet.Notiz, dbo.Tablet.Zustand, dbo.Tablet.Zubehoer
+FROM  dbo.Tablet 
+ 
+END
+
+
+GO
+
+
+ CREATE OR ALTER     PROCEDURE [dbo].[Klassenanzeige]
+AS
+BEGIN
+SET NOCOUNT ON
+ 
+SELECT dbo.Schueler.Klasse AS 'Klasse'
+FROM  dbo.Schueler
+Group by Klasse
+ 
+END
+
+
+GO
