@@ -87,6 +87,7 @@ BEGIN
 	[Zubehoer] [varchar](50) NULL,
 	[Notiz] [varchar](100) NULL,
 	[Status] [varchar](50) NOT NULL,
+	[Zustand] [varchar](50) NOT NULL,
 ) ON [PRIMARY]
 END
 GO
