@@ -151,7 +151,7 @@ PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 GO
 
-INSERT INTO SchuelerMerge (ID, Klasse, Nachname, Vorname, Geburtsdatum, Geschlecht, Straße, PLZ, Ort, Klassenlehrer, Jahrgang) VALUES
+INSERT INTO SchuelerMerge (PNr, Klasse, Nachname, Vorname, Geburtsdatum, Geschlecht, Straße, PLZ, Ort, Klassenlehrer, Jahrgang) VALUES
 (1001, '7A', 'Müller', 'Lena', '2009-04-15', 'w', 'Am Deich 12', 27570, 'Bremerhaven', 'Schmidt', 7),
 (1002, '7A', 'Yılmaz', 'Ahmet', '2009-08-02', 'm', 'Barkhausenstraße 3', 27568, 'Bremerhaven', 'Schmidt', 7),
 (1003, '7A', 'Nguyen', 'Minh', '2010-02-20', 'm', 'Geestemünder Straße 45', 27570, 'Bremerhaven', 'Schmidt', 7),
