@@ -318,8 +318,8 @@ MERGE dbo.Ausgabe AS Target
 USING dbo.AusgabeMerge	AS Source
 ON Source.ID = Target.ID
 WHEN NOT MATCHED BY Target THEN
-    INSERT (ID, SchuelerID, TabletID, [Ausgabe am], [Geplante Abgabe], Abgabe) 
-    VALUES (Source.ID, Source.SchuelerID, Source.TabletID, Source.[Ausgabe am], Source.[Geplante Abgabe], Source.Abgabe);
+    INSERT (SchuelerID, TabletID, [Ausgabe am], [Geplante Abgabe], Abgabe) 
+    VALUES (Source.SchuelerID, Source.TabletID, Source.[Ausgabe am], Source.[Geplante Abgabe], Source.Abgabe);
 
 END
 
