@@ -98,14 +98,17 @@
     <form id="ipad-form" style="margin-top: 20px;">
         <h5 id="form-title">Aktion auswählen</h5>
         <div id="form-content">
-            <!-- Hier werden die Inputs dynamisch eingefügt -->
+            <!-- Eingabefelder werden hier dynamisch eingefügt -->
         </div>
-        <button class="btn green darken-3" type="submit">Aktion ausführen</button>
+        <button id="submit-action" class="btn deep-purple darken-3" type="button">Aktion ausführen</button>
     </form>
+    <div id="output-ipad" class="output-container"></div>
 </div>
 
+
             <div id="test-swipe-5" class="col s12 deep-purple lighten-4 white-text swipeTabs">
-                Output
+            <div id="outputAll" class="output-container"></div>
+            </div>
             </div>
             
         </div>
@@ -125,95 +128,106 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Tabs initialisieren
+    // Materialize-Komponenten initialisieren
     M.Tabs.init(document.querySelectorAll('.tabs'), { swipeable: true });
 
-    // Initialisierung aller Materialize-Komponenten
     function initMaterialize() {
         M.FormSelect.init(document.querySelectorAll('select'));
-        M.Datepicker.init(document.querySelectorAll('.datepicker'));
+        M.Datepicker.init(document.querySelectorAll('.datepicker'), {
+            format: 'yyyy-mm-dd',
+            autoClose: true
+        });
+        M.updateTextFields();
     }
     initMaterialize();
 
-    // Dynamisches Formular
+    // Dynamisches Formular für "IPads verwalten"
     const btnTrennen = document.getElementById('btn-trennen');
     const btnZuordnen = document.getElementById('btn-zuordnen');
     const btnZustand = document.getElementById('btn-zustand');
+    const btnSubmit = document.getElementById('submit-action');
     const formTitle = document.getElementById('form-title');
     const formContent = document.getElementById('form-content');
+    const output = document.getElementById('output-ipad');
 
-    // Funktion: Formular dynamisch aktualisieren
+    let currentAction = '';
+
+    // Formular dynamisch erstellen
     function updateForm(action) {
-        formContent.innerHTML = ''; // Vorherige Inhalte löschen
-        let html = '';
+        currentAction = action;
+        formContent.innerHTML = ''; // Formular-Inhalte löschen
+        let formHTML = '';
 
         if (action === 'trennen') {
             formTitle.textContent = 'Schüler von IPad trennen';
-            html = `
+            formHTML = `
                 <div class="input-field">
-                    <select id="ipad-select">
-                        <option value="" disabled selected>Wähle ein iPad aus</option>
-                        <option value="1">iPad 1</option>
-                        <option value="2">iPad 2</option>
-                        <option value="3">iPad 3</option>
-                    </select>
-                    <label for="ipad-select">IPad auswählen</label>
+                    <input id="ipad-number" type="text" placeholder="iPad-Nummer eingeben">
+                    <label for="ipad-number">iPad-Nummer</label>
                 </div>
-                <button id="action-button" class="btn btn-deep-purple">Trennen</button>
+                <div class="input-field">
+                    <input id="student-number" type="text" placeholder="Schüler-ID eingeben">
+                    <label for="student-number">Schüler-ID</label>
+                </div>
+                <div class="input-field">
+                    <input id="datepicker2" type="text" class="datepicker" placeholder="Abgabe-Datum auswählen">
+                    <label for="datepicker2">Abgabe-Datum</label>
+                </div>
             `;
         } else if (action === 'zuordnen') {
             formTitle.textContent = 'IPad einem Schüler zuordnen';
-            html = `
+            formHTML = `
                 <div class="input-field">
-                    <select id="ipad-select">
-                        <option value="" disabled selected>Wähle ein iPad aus</option>
-                        <option value="1">iPad 1</option>
-                        <option value="2">iPad 2</option>
-                        <option value="3">iPad 3</option>
-                    </select>
-                    <label for="ipad-select">IPad auswählen</label>
+                    <input id="ipad-number" type="text" placeholder="iPad-Nummer eingeben">
+                    <label for="ipad-number">iPad-Nummer</label>
                 </div>
                 <div class="input-field">
-                    <input type="text" id="student-id" placeholder="Schüler-ID eingeben">
-                    <label for="student-id">Schüler-ID</label>
+                    <input id="student-number" type="text" placeholder="Schüler-ID eingeben">
+                    <label for="student-number">Schüler-ID</label>
                 </div>
-                <button id="action-button" class="btn btn-deep-purple">Zuordnen</button>
-            `;
-        } else if (action === 'zustand') {
-            formTitle.textContent = 'IPad Zustand ändern';
-            html = `
-                <div class="input-field">
-                    <select id="ipad-select">
-                        <option value="" disabled selected>Wähle ein iPad aus</option>
-                        <option value="1">iPad 1</option>
-                        <option value="2">iPad 2</option>
-                        <option value="3">iPad 3</option>
-                    </select>
-                    <label for="ipad-select">IPad auswählen</label>
-                </div>
-                <div class="input-field">
-                    <select id="ipad-status">
-                        <option value="" disabled selected>Zustand auswählen</option>
-                        <option value="good">Gut</option>
-                        <option value="fair">In Ordnung</option>
-                        <option value="bad">Schlecht</option>
-                    </select>
-                    <label for="ipad-status">Zustand</label>
-                </div>
-                <button id="action-button" class="btn btn-deep-purple">Zustand ändern</button>
             `;
         }
 
-        formContent.innerHTML = html;
-        initMaterialize(); // Reinitialisiere Materialize-Komponenten
+        formContent.innerHTML = formHTML;
+        initMaterialize(); // Initialisiere neu eingefügte Komponenten
     }
 
-    // Event-Listener für dynamische Buttons
-    if (btnTrennen) btnTrennen.addEventListener('click', () => updateForm('trennen'));
-    if (btnZuordnen) btnZuordnen.addEventListener('click', () => updateForm('zuordnen'));
-    if (btnZustand) btnZustand.addEventListener('click', () => updateForm('zustand'));
+    // Event-Listener für die Buttons
+    btnTrennen?.addEventListener('click', () => updateForm('trennen'));
+    btnZuordnen?.addEventListener('click', () => updateForm('zuordnen'));
+    btnZustand?.addEventListener('click', () => updateForm('zustand'));
 
-    // History-Tab-Logik
+    // Formular senden
+    btnSubmit?.addEventListener('click', function () {
+        const ipadNumber = document.getElementById('ipad-number')?.value;
+        const studentNumber = document.getElementById('student-number')?.value;
+        const abgabeDatum = document.getElementById('datepicker2')?.value;
+
+        if (currentAction === 'trennen') {
+            if (!ipadNumber || !studentNumber || !abgabeDatum) {
+                alert("Bitte alle Felder ausfüllen!");
+                return;
+            }
+            $.ajax({
+                url: 'ipadTrennen.php',
+                method: 'POST',
+                data: {
+                    tabletId: ipadNumber,
+                    schuelerId: studentNumber,
+                    abgabeDatum: abgabeDatum
+                },
+                success: function (response) {
+                    output.innerHTML = `<p>${response}</p>`;
+                },
+                error: function (xhr, status, error) {
+                    console.error("Fehler:", status, error);
+                    output.innerHTML = `<p>Fehler beim Trennen: ${error}</p>`;
+                }
+            });
+        }
+    });
+
+    // History-Tab bleibt unangetastet
     const inputField = document.getElementById("search-input");
     const inputLabel = document.getElementById("search-label");
     const btnSchueler = document.getElementById("btn-schueler");
@@ -222,57 +236,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let searchType = null;
 
-    if (btnSchueler) {
-        btnSchueler.addEventListener("click", () => {
-            searchType = 'schueler';
-            inputField.disabled = false;
-            inputField.placeholder = "Schüler oder Schülernummer eingeben...";
-            inputLabel.textContent = "Schüler-Suchfeld";
-            inputLabel.style.display = "block";
-        });
-    }
+    btnSchueler?.addEventListener("click", () => {
+        searchType = 'schueler';
+        inputField.disabled = false;
+        inputField.placeholder = "Schüler oder Schülernummer eingeben...";
+        inputLabel.style.display = "block";
+    });
 
-    if (btnIpad) {
-        btnIpad.addEventListener("click", () => {
-            searchType = 'ipad';
-            inputField.disabled = false;
-            inputField.placeholder = "iPad-Nummer eingeben...";
-            inputLabel.textContent = "iPad-Suchfeld";
-            inputLabel.style.display = "block";
-        });
-    }
+    btnIpad?.addEventListener("click", () => {
+        searchType = 'ipad';
+        inputField.disabled = false;
+        inputField.placeholder = "iPad-Nummer eingeben...";
+        inputLabel.style.display = "block";
+    });
 
-    if (refreshButton) {
-        refreshButton.addEventListener("click", () => {
-            const searchInput = inputField.value;
-            const datepicker = document.getElementById("datepicker").value;
+    refreshButton?.addEventListener("click", () => {
+        const searchInput = inputField.value;
+        const datepicker = document.getElementById("datepicker").value;
 
-            if (!searchType) {
-                alert("Bitte wählen Sie aus, ob Sie nach Schüler oder iPad suchen möchten.");
-                return;
+        if (!searchType || !searchInput || !datepicker) {
+            alert("Bitte alle Felder ausfüllen!");
+            return;
+        }
+
+        const url = searchType === 'schueler' ? 'sushistory.php' : 'tablethistory.php';
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: { search: searchInput, date: datepicker },
+            success: function (response) {
+                document.getElementById("output").innerHTML = response;
+            },
+            error: function (xhr, status, error) {
+                console.error("Fehler bei AJAX:", status, error);
             }
-
-            if (!searchInput || !datepicker) {
-                alert("Bitte geben Sie sowohl eine Suchnummer als auch ein Datum ein.");
-                return;
-            }
-
-            const url = searchType === 'schueler' ? 'sushistory.php' : 'tablethistory.php';
-
-            $.ajax({
-                url: url,
-                method: 'POST',
-                data: { search: searchInput, date: datepicker },
-                success: function (response) {
-                    document.getElementById("output").innerHTML = response;
-                },
-                error: function (xhr, status, error) {
-                    console.error("Fehler bei AJAX:", status, error);
-                }
-            });
         });
-    }
+    });
 });
+
+
 
 </script>
 </body>
