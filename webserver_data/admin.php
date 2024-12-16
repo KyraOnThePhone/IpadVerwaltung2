@@ -1,12 +1,3 @@
-<?php
-session_start();
-
-if (!isset($_SESSION['loggedin'])) {
-	header('Location: index.html');
-	exit;
-}
-?>
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -25,7 +16,7 @@ if (!isset($_SESSION['loggedin'])) {
             <a href="#!" class="brand-logo"><i class="material-icons">tablet_mac</i>IPad Verwaltung</a>
             <ul class="right hide-on-med-and-down">
                 <li><i class="material-icons">account_box</i></li>
-                <li><?=htmlspecialchars($_SESSION['name'], ENT_QUOTES)?></li>
+                <li><?= htmlspecialchars($_SESSION['name'], ENT_QUOTES) ?></li>
                 <li><a href="logout.php">Logout</a></li>
             </ul>
         </div>
@@ -35,8 +26,7 @@ if (!isset($_SESSION['loggedin'])) {
 <main>
     <div class="container">
         <div class="row">
-        <ul id="tabs-swipe-demo" class="tabs tabs-fixed-width center-align">
-
+            <ul id="tabs-swipe-demo" class="tabs tabs-fixed-width center-align">
                 <li class="tab col s3"><a class="active" href="#test-swipe-1">Filter</a></li>
                 <li class="tab col s3"><a href="#test-swipe-2">History</a></li>
                 <li class="tab col s3"><a href="#test-swipe-3">Datei Upload</a></li>
@@ -44,49 +34,42 @@ if (!isset($_SESSION['loggedin'])) {
                 <li class="tab col s3"><a href="#test-swipe-5">Alle IPads</a></li>
             </ul>
 
-<div id="test-swipe-1" class="col s12 container deep-purple lighten-4 white-text swipeTabs">
-    <button>gestohlene/verlorene IPads</button>
-    <button>IPads mit gutem Zustand</button>
-    <button>IPads mit schlechtem Zustand</button>
-    <button>verliehene IPads</button>
-    <button>freie IPads</button>
+            <!-- Tab Content -->
+            <div id="test-swipe-1" class="col s12 container deep-purple lighten-4 white-text swipeTabs">
+                <button>gestohlene/verlorene IPads</button>
+                <button>IPads mit gutem Zustand</button>
+                <button>IPads mit schlechtem Zustand</button>
+                <button>verliehene IPads</button>
+                <button>freie IPads</button>
+                <div class="input-field col s12">
+                    <select id="form-select-1">
+                        <option value="">alle Klassen</option>
+                        <option value="1">Klasse</option>
+                        <option value="2">Klasse 1</option>
+                        <option value="3">Klasse 3</option>
+                    </select>
+                    <label for="form-select-1">IPads dieser Klasse anzeigen:</label>
+                </div>
+                <div>
+                    <button id="btn-refresh"><i class="material-icons">refresh</i></button>
+                </div>
+            </div>
 
-    <div class="input-field col s12">
-        <select id="form-select-1">
-            <option value="">alle Klassen</option>
-            <option value="1">Klasse</option>
-            <option value="2">Klasse 1</option>
-            <option value="3">Klasse 3</option>
-        </select>
-        <label for="form-select-1">IPads dieser Klasse anzeigen:</label>
-    </div>
-    <div>
-    <button><i class="material-icons">refresh</i></button>
-    </div>
-    <div>Ausgabe</div>
-</div>
-
-<div id="test-swipe-2" class="col s12 deep-purple lighten-4 white-text swipeTabs">
-    <button id="btn-schueler" class="btn deep-purple darken-3">Schüler oder Schülernummer</button>
-    <button id="btn-ipad" class="btn deep-purple darken-3">IPadnummer</button>
-
-    <div class="input-field col s12">
-        <input
-            id="search-input"
-            type="text"
-            placeholder=""
-            disabled
-        />
-        <label for="search-input" id="search-label" style="display: none;">Suchfeld</label>
-        <div class="input-field col s12">
-    <label for="datepicker">Zeitpunkt</label>
-    <input id="datepicker" type="text" class="datepicker">
-</div>
-<button><i class="material-icons">refresh</i></button>
-    </div>
-    <div>Ausgabe</div>
-</div>
-
+            <div id="test-swipe-2" class="col s12 deep-purple lighten-4 white-text swipeTabs">
+                <button id="btn-schueler" class="btn deep-purple darken-3">Schüler oder Schülernummer</button>
+                <button id="btn-ipad" class="btn deep-purple darken-3">IPadnummer</button>
+                <div class="input-field col s12">
+                    <input id="search-input" type="text" placeholder="" disabled>
+                    <label for="search-input" id="search-label" style="display: none;">Suchfeld</label>
+                </div>
+                <div class="input-field col s12">
+                    <label for="datepicker">Zeitpunkt</label>
+                    <input id="datepicker" type="text" class="datepicker">
+                </div>
+                <button id="refreshhistory"><i class="material-icons">refresh</i></button>
+                <div id="output" class="output-container"></div>
+            </div>
+            
             <div id="test-swipe-3" class="col s12 deep-purple lighten-4 white-text swipeTabs">
             <div class="file-field input-field">
       <div class="btn deep-purple darken-3">
@@ -124,6 +107,8 @@ if (!isset($_SESSION['loggedin'])) {
             
         </div>
     </div>
+        </div>
+    </div>
 </main>
 
 <footer class="page-footer deep-purple darken-3">
@@ -138,134 +123,97 @@ if (!isset($_SESSION['loggedin'])) {
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Tabs initialisieren
-    const tabs = document.querySelectorAll('.tabs');
-    M.Tabs.init(tabs, { swipeable: true });
+    M.Tabs.init(document.querySelectorAll('.tabs'), { swipeable: true });
 
     // Select initialisieren
-    const selects = document.querySelectorAll('select');
-    M.FormSelect.init(selects);
-
-    // Höhe des Tabs-Containers setzen
-    $(".tabs-content").css({
-        height: '75vh'
-    });
+    M.FormSelect.init(document.querySelectorAll('select'));
 
     // Datepicker initialisieren
-    const datepickers = document.querySelectorAll('.datepicker');
-    M.Datepicker.init(datepickers, {
-        // Optionen für den Datepicker können hier spezifiziert werden
-    });
+    M.Datepicker.init(document.querySelectorAll('.datepicker'));
 
-    // Textfeld & Buttons (History Tab)
+    // Buttons für History Tab
     const inputField = document.getElementById("search-input");
     const inputLabel = document.getElementById("search-label");
     const btnSchueler = document.getElementById("btn-schueler");
     const btnIpad = document.getElementById("btn-ipad");
 
-    // Event Listener für "Schüler"-Button
-    btnSchueler.addEventListener("click", () => {
-        inputField.disabled = false; // Textfeld aktivieren
-        inputField.placeholder = "Schüler oder Schülernummer eingeben..."; // Passenden Placeholder setzen
-        inputLabel.textContent = "Schüler-Suchfeld"; // Label anpassen
-        inputLabel.style.display = "block"; // Label anzeigen
-        inputField.focus(); // Fokus auf Textfeld setzen
-    });
-
-    // Event Listener für "iPad"-Button
-    btnIpad.addEventListener("click", () => {
-        inputField.disabled = false; // Textfeld aktivieren
-        inputField.placeholder = "iPad-Nummer eingeben..."; // Passenden Placeholder setzen
-        inputLabel.textContent = "iPad-Suchfeld"; // Label anpassen
-        inputLabel.style.display = "block"; // Label anzeigen
-        inputField.focus(); // Fokus auf Textfeld setzen
-    });
-
-    // Dynamisches Formular (iPads verwalten)
-    const btnTrennen = document.getElementById('btn-trennen');
-    const btnZuordnen = document.getElementById('btn-zuordnen');
-    const btnZustand = document.getElementById('btn-zustand');
-    const formTitle = document.getElementById('form-title');
-    const formContent = document.getElementById('form-content');
-
-    // Funktion: Formular dynamisch aktualisieren
-function updateForm(action) {
-    formContent.innerHTML = ''; // Vorherige Inhalte löschen
-    let html = '';
-
-    if (action === 'trennen') {
-        formTitle.textContent = 'Schüler von IPad trennen';
-        html = `
-            <div class="input-field">
-                <select id="ipad-select">
-                    <option value="" disabled selected>Wähle ein iPad aus</option>
-                    <option value="1">iPad 1</option>
-                    <option value="2">iPad 2</option>
-                    <option value="3">iPad 3</option>
-                </select>
-                <label for="ipad-select">IPad auswählen</label>
-            </div>
-            <button id="action-button" class="btn btn-deep-purple">Trennen</button>
-        `;
-    } else if (action === 'zuordnen') {
-        formTitle.textContent = 'IPad einem Schüler zuordnen';
-        html = `
-            <div class="input-field">
-                <select id="ipad-select">
-                    <option value="" disabled selected>Wähle ein iPad aus</option>
-                    <option value="1">iPad 1</option>
-                    <option value="2">iPad 2</option>
-                    <option value="3">iPad 3</option>
-                </select>
-                <label for="ipad-select">IPad auswählen</label>
-            </div>
-            <div class="input-field">
-                <input type="text" id="student-id" placeholder="Schüler-ID eingeben">
-                <label for="student-id">Schüler-ID</label>
-            </div>
-            <button id="action-button" class="btn btn-deep-purple">Zuordnen</button>
-        `;
-    } else if (action === 'zustand') {
-        formTitle.textContent = 'IPad Zustand ändern';
-        html = `
-            <div class="input-field">
-                <select id="ipad-select">
-                    <option value="" disabled selected>Wähle ein iPad aus</option>
-                    <option value="1">iPad 1</option>
-                    <option value="2">iPad 2</option>
-                    <option value="3">iPad 3</option>
-                </select>
-                <label for="ipad-select">IPad auswählen</label>
-            </div>
-            <div class="input-field">
-                <select id="ipad-status">
-                    <option value="" disabled selected>Zustand auswählen</option>
-                    <option value="good">Gut</option>
-                    <option value="fair">In Ordnung</option>
-                    <option value="bad">Schlecht</option>
-                </select>
-                <label for="ipad-status">Zustand</label>
-            </div>
-            <button id="action-button" class="btn btn-deep-purple">Zustand ändern</button>
-        `;
+    if (btnSchueler) {
+        btnSchueler.addEventListener("click", () => {
+            inputField.disabled = false;
+            inputField.placeholder = "Schüler oder Schülernummer eingeben...";
+            inputLabel.textContent = "Schüler-Suchfeld";
+            inputLabel.style.display = "block";
+            inputField.focus();
+        });
     }
 
-    formContent.innerHTML = html;
+    if (btnIpad) {
+        btnIpad.addEventListener("click", () => {
+            inputField.disabled = false;
+            inputField.placeholder = "iPad-Nummer eingeben...";
+            inputLabel.textContent = "iPad-Suchfeld";
+            inputLabel.style.display = "block";
+            inputField.focus();
+        });
+    }
 
-    // Materialize-Komponenten initialisieren
-    const selects = document.querySelectorAll('select');
-    M.FormSelect.init(selects);
-}
+    // Refresh-Button für History
+    let searchType = null; // Variable, um den Typ der Suche zu speichern
 
-
-    // Event-Listener für die Buttons
-    btnTrennen.addEventListener('click', () => updateForm('trennen'));
-    btnZuordnen.addEventListener('click', () => updateForm('zuordnen'));
-    btnZustand.addEventListener('click', () => updateForm('zustand'));
+// Event Listener für "Schüler"-Button
+document.getElementById("btn-schueler").addEventListener("click", function () {
+    searchType = 'schueler'; // Setze den Typ auf "Schüler"
+    document.getElementById("search-input").disabled = false; // Suchfeld aktivieren
+    document.getElementById("search-input").placeholder = "Schüler oder Schülernummer eingeben...";
+    document.getElementById("search-label").textContent = "Schüler-Suchfeld";
+    document.getElementById("search-label").style.display = "block";
 });
 
-      
+// Event Listener für "iPad"-Button
+document.getElementById("btn-ipad").addEventListener("click", function () {
+    searchType = 'ipad'; // Setze den Typ auf "iPad"
+    document.getElementById("search-input").disabled = false; // Suchfeld aktivieren
+    document.getElementById("search-input").placeholder = "iPad-Nummer eingeben...";
+    document.getElementById("search-label").textContent = "iPad-Suchfeld";
+    document.getElementById("search-label").style.display = "block";
+});
 
+// Event Listener für den "Refresh"-Button
+document.getElementById("refreshhistory").addEventListener("click", function () {
+    const searchInput = document.getElementById("search-input").value;
+    const datepicker = document.getElementById("datepicker").value;
+
+    if (!searchType) {
+        alert("Bitte wählen Sie aus, ob Sie nach Schüler oder iPad suchen möchten.");
+        return;
+    }
+
+    if (!searchInput || !datepicker) {
+        alert("Bitte geben Sie sowohl eine Suchnummer als auch ein Datum ein.");
+        return;
+    }
+
+    const url = searchType === 'schueler' ? 'sushistory.php' : 'tablethistory.php';
+
+    // AJAX-Aufruf an die entsprechende PHP-Datei
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: {
+            search: searchInput,
+            date: datepicker
+        },
+        success: function (response) {
+            document.getElementById("output").innerHTML = response;
+        },
+        error: function (xhr, status, error) {
+            console.error("Fehler bei AJAX:", status, error);
+        }
+    });
+});
+
+});
 </script>
-
 </body>
 </html>
+
