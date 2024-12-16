@@ -84,6 +84,9 @@
     <div>
         <button>Daten einpflegen</button>
       </div>
+      <div>
+        <a href="fancy.gif" download="rickroll"><button><i class="material-icons">download</i>CSV Vorlage</button></a>
+      </div>
             </div>
             <div id="test-swipe-4" class="col s12 deep-purple lighten-4 white-text swipeTabs">
     <!-- Buttons für Auswahl der Funktion -->
@@ -125,94 +128,152 @@ document.addEventListener('DOMContentLoaded', function () {
     // Tabs initialisieren
     M.Tabs.init(document.querySelectorAll('.tabs'), { swipeable: true });
 
-    // Select initialisieren
-    M.FormSelect.init(document.querySelectorAll('select'));
+    // Initialisierung aller Materialize-Komponenten
+    function initMaterialize() {
+        M.FormSelect.init(document.querySelectorAll('select'));
+        M.Datepicker.init(document.querySelectorAll('.datepicker'));
+    }
+    initMaterialize();
 
-    // Datepicker initialisieren
-    M.Datepicker.init(document.querySelectorAll('.datepicker'));
+    // Dynamisches Formular
+    const btnTrennen = document.getElementById('btn-trennen');
+    const btnZuordnen = document.getElementById('btn-zuordnen');
+    const btnZustand = document.getElementById('btn-zustand');
+    const formTitle = document.getElementById('form-title');
+    const formContent = document.getElementById('form-content');
 
-    // Buttons für History Tab
+    // Funktion: Formular dynamisch aktualisieren
+    function updateForm(action) {
+        formContent.innerHTML = ''; // Vorherige Inhalte löschen
+        let html = '';
+
+        if (action === 'trennen') {
+            formTitle.textContent = 'Schüler von IPad trennen';
+            html = `
+                <div class="input-field">
+                    <select id="ipad-select">
+                        <option value="" disabled selected>Wähle ein iPad aus</option>
+                        <option value="1">iPad 1</option>
+                        <option value="2">iPad 2</option>
+                        <option value="3">iPad 3</option>
+                    </select>
+                    <label for="ipad-select">IPad auswählen</label>
+                </div>
+                <button id="action-button" class="btn btn-deep-purple">Trennen</button>
+            `;
+        } else if (action === 'zuordnen') {
+            formTitle.textContent = 'IPad einem Schüler zuordnen';
+            html = `
+                <div class="input-field">
+                    <select id="ipad-select">
+                        <option value="" disabled selected>Wähle ein iPad aus</option>
+                        <option value="1">iPad 1</option>
+                        <option value="2">iPad 2</option>
+                        <option value="3">iPad 3</option>
+                    </select>
+                    <label for="ipad-select">IPad auswählen</label>
+                </div>
+                <div class="input-field">
+                    <input type="text" id="student-id" placeholder="Schüler-ID eingeben">
+                    <label for="student-id">Schüler-ID</label>
+                </div>
+                <button id="action-button" class="btn btn-deep-purple">Zuordnen</button>
+            `;
+        } else if (action === 'zustand') {
+            formTitle.textContent = 'IPad Zustand ändern';
+            html = `
+                <div class="input-field">
+                    <select id="ipad-select">
+                        <option value="" disabled selected>Wähle ein iPad aus</option>
+                        <option value="1">iPad 1</option>
+                        <option value="2">iPad 2</option>
+                        <option value="3">iPad 3</option>
+                    </select>
+                    <label for="ipad-select">IPad auswählen</label>
+                </div>
+                <div class="input-field">
+                    <select id="ipad-status">
+                        <option value="" disabled selected>Zustand auswählen</option>
+                        <option value="good">Gut</option>
+                        <option value="fair">In Ordnung</option>
+                        <option value="bad">Schlecht</option>
+                    </select>
+                    <label for="ipad-status">Zustand</label>
+                </div>
+                <button id="action-button" class="btn btn-deep-purple">Zustand ändern</button>
+            `;
+        }
+
+        formContent.innerHTML = html;
+        initMaterialize(); // Reinitialisiere Materialize-Komponenten
+    }
+
+    // Event-Listener für dynamische Buttons
+    if (btnTrennen) btnTrennen.addEventListener('click', () => updateForm('trennen'));
+    if (btnZuordnen) btnZuordnen.addEventListener('click', () => updateForm('zuordnen'));
+    if (btnZustand) btnZustand.addEventListener('click', () => updateForm('zustand'));
+
+    // History-Tab-Logik
     const inputField = document.getElementById("search-input");
     const inputLabel = document.getElementById("search-label");
     const btnSchueler = document.getElementById("btn-schueler");
     const btnIpad = document.getElementById("btn-ipad");
+    const refreshButton = document.getElementById("refreshhistory");
+
+    let searchType = null;
 
     if (btnSchueler) {
         btnSchueler.addEventListener("click", () => {
+            searchType = 'schueler';
             inputField.disabled = false;
             inputField.placeholder = "Schüler oder Schülernummer eingeben...";
             inputLabel.textContent = "Schüler-Suchfeld";
             inputLabel.style.display = "block";
-            inputField.focus();
         });
     }
 
     if (btnIpad) {
         btnIpad.addEventListener("click", () => {
+            searchType = 'ipad';
             inputField.disabled = false;
             inputField.placeholder = "iPad-Nummer eingeben...";
             inputLabel.textContent = "iPad-Suchfeld";
             inputLabel.style.display = "block";
-            inputField.focus();
         });
     }
 
-    // Refresh-Button für History
-    let searchType = null; // Variable, um den Typ der Suche zu speichern
+    if (refreshButton) {
+        refreshButton.addEventListener("click", () => {
+            const searchInput = inputField.value;
+            const datepicker = document.getElementById("datepicker").value;
 
-// Event Listener für "Schüler"-Button
-document.getElementById("btn-schueler").addEventListener("click", function () {
-    searchType = 'schueler'; // Setze den Typ auf "Schüler"
-    document.getElementById("search-input").disabled = false; // Suchfeld aktivieren
-    document.getElementById("search-input").placeholder = "Schüler oder Schülernummer eingeben...";
-    document.getElementById("search-label").textContent = "Schüler-Suchfeld";
-    document.getElementById("search-label").style.display = "block";
-});
+            if (!searchType) {
+                alert("Bitte wählen Sie aus, ob Sie nach Schüler oder iPad suchen möchten.");
+                return;
+            }
 
-// Event Listener für "iPad"-Button
-document.getElementById("btn-ipad").addEventListener("click", function () {
-    searchType = 'ipad'; // Setze den Typ auf "iPad"
-    document.getElementById("search-input").disabled = false; // Suchfeld aktivieren
-    document.getElementById("search-input").placeholder = "iPad-Nummer eingeben...";
-    document.getElementById("search-label").textContent = "iPad-Suchfeld";
-    document.getElementById("search-label").style.display = "block";
-});
+            if (!searchInput || !datepicker) {
+                alert("Bitte geben Sie sowohl eine Suchnummer als auch ein Datum ein.");
+                return;
+            }
 
-// Event Listener für den "Refresh"-Button
-document.getElementById("refreshhistory").addEventListener("click", function () {
-    const searchInput = document.getElementById("search-input").value;
-    const datepicker = document.getElementById("datepicker").value;
+            const url = searchType === 'schueler' ? 'sushistory.php' : 'tablethistory.php';
 
-    if (!searchType) {
-        alert("Bitte wählen Sie aus, ob Sie nach Schüler oder iPad suchen möchten.");
-        return;
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: { search: searchInput, date: datepicker },
+                success: function (response) {
+                    document.getElementById("output").innerHTML = response;
+                },
+                error: function (xhr, status, error) {
+                    console.error("Fehler bei AJAX:", status, error);
+                }
+            });
+        });
     }
-
-    if (!searchInput || !datepicker) {
-        alert("Bitte geben Sie sowohl eine Suchnummer als auch ein Datum ein.");
-        return;
-    }
-
-    const url = searchType === 'schueler' ? 'sushistory.php' : 'tablethistory.php';
-
-    // AJAX-Aufruf an die entsprechende PHP-Datei
-    $.ajax({
-        url: url,
-        method: 'POST',
-        data: {
-            search: searchInput,
-            date: datepicker
-        },
-        success: function (response) {
-            document.getElementById("output").innerHTML = response;
-        },
-        error: function (xhr, status, error) {
-            console.error("Fehler bei AJAX:", status, error);
-        }
-    });
 });
 
-});
 </script>
 </body>
 </html>
