@@ -492,3 +492,16 @@ END
 
 
 GO
+
+ CREATE OR ALTER     PROCEDURE [dbo].[TabletID]
+AS
+BEGIN
+SET NOCOUNT ON
+ 
+SELECT dbo.Tablet.ItemID as "TabletID"
+FROM  dbo.Tablet
+ 
+END
+
+
+GO
