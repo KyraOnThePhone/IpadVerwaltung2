@@ -472,6 +472,20 @@ END
 
 GO
 
+
+Create OR ALTER       PROCEDURE [dbo].[TZV]
+(@TID int)
+AS
+BEGIN
+SET NOCOUNT ON
+ 
+ UPDATE dbo.Tablet
+ SET Zustand = 'Verloren'
+ Where ItemID = @TID
+END
+
+GO
+
  CREATE OR ALTER       PROCEDURE [dbo].[TAusgabe]
 (@TID int, @SID int, @SDate date, @EDate date)
 AS
