@@ -215,6 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <option value="gut">Gut</option>
                         <option value="gebraucht">Gebraucht</option>
                         <option value="schlecht">Schlecht</option>
+                        <option value="verloren">Verloren</option>
                     </select>
                     <label for="zustand-select">Zustand</label>
                 </div>
@@ -246,7 +247,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         : zustand === 'gebraucht' 
                         ? 'zustandGebraucht.php' 
                         : zustand === 'schlecht' 
-                        ? 'zustandSchlecht.php' 
+                        ? 'zustandSchlecht.php'
+                        : zustand === 'verloren'
+                        ? 'verloren.php'
                         : null;
 
             if (url) {
