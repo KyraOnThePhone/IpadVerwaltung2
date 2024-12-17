@@ -130,7 +130,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Materialize-Komponenten initialisieren
     M.Tabs.init(document.querySelectorAll('.tabs'), { swipeable: true });
-
     function initMaterialize() {
         M.FormSelect.init(document.querySelectorAll('select'));
         M.Datepicker.init(document.querySelectorAll('.datepicker'), {
@@ -141,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     initMaterialize();
 
-    // Dynamisches Formular für "IPads verwalten"
+    // Variablen für die Formulare und Tabs
     const btnTrennen = document.getElementById('btn-trennen');
     const btnZuordnen = document.getElementById('btn-zuordnen');
     const btnZustand = document.getElementById('btn-zustand');
@@ -149,9 +148,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const formTitle = document.getElementById('form-title');
     const formContent = document.getElementById('form-content');
     const outputIPad = document.getElementById('output-ipad');
+    const outputHistory = document.getElementById('output');
     let currentAction = '';
 
-    // Dynamisches Formular erstellen
+    // Dynamisches Formular für iPads verwalten
     function updateForm(action) {
         currentAction = action;
         formContent.innerHTML = '';
@@ -193,74 +193,62 @@ document.addEventListener('DOMContentLoaded', function () {
                     <label for="geplante-abgabe">Geplante Abgabe-Datum</label>
                 </div>
             `;
+        } else if (action === 'zustand') {
+            formTitle.textContent = 'Zustand des IPads ändern';
+            formHTML = `
+                <div class="input-field">
+                    <input id="ipad-number" type="text" placeholder="iPad-Nummer eingeben">
+                    <label for="ipad-number">iPad-Nummer</label>
+                </div>
+                <div class="input-field">
+                    <select id="zustand-select">
+                        <option value="" disabled selected>Zustand auswählen</option>
+                        <option value="gut">Gut</option>
+                        <option value="gebraucht">Gebraucht</option>
+                        <option value="schlecht">Schlecht</option>
+                    </select>
+                    <label for="zustand-select">Zustand</label>
+                </div>
+            `;
         }
 
         formContent.innerHTML = formHTML;
-        initMaterialize(); // Reinitialisieren
+        initMaterialize();
     }
 
     // Event-Listener für Buttons
     btnTrennen?.addEventListener('click', () => updateForm('trennen'));
     btnZuordnen?.addEventListener('click', () => updateForm('zuordnen'));
+    btnZustand?.addEventListener('click', () => updateForm('zustand'));
 
-    // Formular senden im iPad-Verwalten-Tab
     btnSubmit?.addEventListener('click', function () {
         const ipadNumber = document.getElementById('ipad-number')?.value;
-        const studentNumber = document.getElementById('student-number')?.value;
 
-        if (currentAction === 'trennen') {
-            const abgabeDatum = document.getElementById('datepicker2')?.value;
-
-            if (!ipadNumber || !studentNumber || !abgabeDatum) {
+        if (currentAction === 'zustand') {
+            const zustand = document.getElementById('zustand-select')?.value;
+            if (!ipadNumber || !zustand) {
                 alert("Bitte alle Felder ausfüllen!");
                 return;
             }
-            sendRequest('ipadTrennen.php', { 
-                tabletId: ipadNumber, 
-                schuelerId: studentNumber, 
-                abgabeDatum 
-            }, outputIPad);
+            sendRequest('zustandGut.php', { tabletId: ipadNumber }, outputIPad);
+        } else if (currentAction === 'trennen') {
+            const studentNumber = document.getElementById('student-number')?.value;
+            const abgabeDatum = document.getElementById('datepicker2')?.value;
+            sendRequest('ipadTrennen.php', { tabletId: ipadNumber, schuelerId: studentNumber, abgabeDatum }, outputIPad);
         } else if (currentAction === 'zuordnen') {
+            const studentNumber = document.getElementById('student-number')?.value;
             const ausgabeDatum = document.getElementById('ausgabe-datum')?.value;
             const geplanteAbgabe = document.getElementById('geplante-abgabe')?.value;
-
-            if (!ipadNumber || !studentNumber || !ausgabeDatum || !geplanteAbgabe) {
-                alert("Bitte alle Felder ausfüllen!");
-                return;
-            }
-            sendRequest('ipadZuordnen.php', { 
-                tabletId: ipadNumber, 
-                schuelerId: studentNumber, 
-                ausgabeDatum, 
-                geplanteAbgabe 
-            }, outputIPad);
+            sendRequest('ipadZuordnen.php', { tabletId: ipadNumber, schuelerId: studentNumber, ausgabeDatum, geplanteAbgabe }, outputIPad);
         }
     });
 
-    // AJAX-Request senden
-    function sendRequest(url, data, outputContainer) {
-        $.ajax({
-            url: url,
-            method: 'POST',
-            data: data,
-            success: function (response) {
-                outputContainer.innerHTML = `<p>${response}</p>`;
-            },
-            error: function (xhr, status, error) {
-                console.error("Fehler:", status, error);
-                outputContainer.innerHTML = `<p>Fehler: ${error}</p>`;
-            }
-        });
-    }
-
-    // History-Tab bleibt unangetastet
+    // History-Tab Funktionen
     const inputField = document.getElementById("search-input");
     const inputLabel = document.getElementById("search-label");
     const btnSchueler = document.getElementById("btn-schueler");
     const btnIpad = document.getElementById("btn-ipad");
     const refreshButton = document.getElementById("refreshhistory");
-    const outputHistory = document.getElementById("output");
-
     let searchType = null;
 
     btnSchueler?.addEventListener("click", () => {
@@ -280,48 +268,46 @@ document.addEventListener('DOMContentLoaded', function () {
     refreshButton?.addEventListener("click", () => {
         const searchInput = inputField.value;
         const datepicker = document.getElementById("datepicker").value;
-
-        if (!searchType || !searchInput || !datepicker) {
-            alert("Bitte alle Felder ausfüllen!");
-            return;
-        }
-
         const url = searchType === 'schueler' ? 'sushistory.php' : 'tablethistory.php';
         sendRequest(url, { search: searchInput, date: datepicker }, outputHistory);
     });
-    function loadAllTablets() {
+
+    // AJAX-Request senden
+    function sendRequest(url, data, outputContainer) {
         $.ajax({
-            url: 'ipadsAnzeigen.php', 
-            method: 'GET',
-            dataType: 'json',
+            url: url,
+            method: 'POST',
+            data: data,
             success: function (response) {
-                let output = '<table class="striped">';
-                output += '<thead><tr><th>TabletID</th><th>Modell</th><th>Zustand</th><th>Zubehör</th></tr></thead><tbody>';
-                
-                response.forEach(function (tablet) {
-                    output += `
-                        <tr>
-                            <td>${tablet.TabletID}</td>
-                            <td>${tablet.Modell}</td>
-                            <td>${tablet.Zustand}</td>
-                            <td>${tablet.Zubehoer ? tablet.Zubehoer : 'N/A'}</td>
-                        </tr>
-                    `;
-                });
-                
-                output += '</tbody></table>';
-                document.getElementById('outputAll').innerHTML = output;
+                outputContainer.innerHTML = `<p>${response}</p>`;
             },
             error: function (xhr, status, error) {
-                console.error("Fehler beim Abrufen der Daten:", status, error);
-                document.getElementById('outputAll').innerHTML = `<p>Fehler: ${error}</p>`;
+                console.error("Fehler:", status, error);
+                outputContainer.innerHTML = `<p>Fehler: ${error}</p>`;
             }
         });
     }
 
-    // Lade Daten beim Seitenaufruf
-    loadAllTablets();
+    // Lade alle Tablets bei Seitenaufruf
+    $.ajax({
+        url: 'ipadsAnzeigen.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            let output = '<table class="striped"><thead><tr><th>TabletID</th><th>Modell</th><th>Zustand</th><th>Zubehör</th></tr></thead><tbody>';
+            response.forEach(tablet => {
+                output += `<tr><td>${tablet.TabletID}</td><td>${tablet.Modell}</td><td>${tablet.Zustand}</td><td>${tablet.Zubehoer || 'N/A'}</td></tr>`;
+            });
+            output += '</tbody></table>';
+            document.getElementById('outputAll').innerHTML = output;
+        },
+        error: function () {
+            document.getElementById('outputAll').innerHTML = '<p>Fehler beim Laden der Daten.</p>';
+        }
+    });
 });
+
+
 
 </script>
 </body>
