@@ -433,6 +433,45 @@ END
 
 GO
 
+Create OR ALTER       PROCEDURE [dbo].[TZG]
+(@TID int)
+AS
+BEGIN
+SET NOCOUNT ON
+ 
+ UPDATE dbo.Tablet
+ SET Zustand = 'Gut'
+ Where ItemID = @TID
+END
+
+GO
+
+Create OR ALTER       PROCEDURE [dbo].[TZGB]
+(@TID int)
+AS
+BEGIN
+SET NOCOUNT ON
+ 
+ UPDATE dbo.Tablet
+ SET Zustand = 'Gebraucht'
+ Where ItemID = @TID
+END
+
+GO
+
+Create OR ALTER       PROCEDURE [dbo].[TZS]
+(@TID int)
+AS
+BEGIN
+SET NOCOUNT ON
+ 
+ UPDATE dbo.Tablet
+ SET Zustand = 'Schlecht'
+ Where ItemID = @TID
+END
+
+GO
+
  CREATE OR ALTER       PROCEDURE [dbo].[TAusgabe]
 (@TID int, @SID int, @SDate date, @EDate date)
 AS
