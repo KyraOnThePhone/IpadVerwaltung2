@@ -289,6 +289,38 @@ document.addEventListener('DOMContentLoaded', function () {
         const url = searchType === 'schueler' ? 'sushistory.php' : 'tablethistory.php';
         sendRequest(url, { search: searchInput, date: datepicker }, outputHistory);
     });
+    function loadAllTablets() {
+        $.ajax({
+            url: 'ipadsAnzeigen.php', 
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                let output = '<table class="striped">';
+                output += '<thead><tr><th>TabletID</th><th>Modell</th><th>Zustand</th><th>Zubehör</th></tr></thead><tbody>';
+                
+                response.forEach(function (tablet) {
+                    output += `
+                        <tr>
+                            <td>${tablet.TabletID}</td>
+                            <td>${tablet.Modell}</td>
+                            <td>${tablet.Zustand}</td>
+                            <td>${tablet.Zubehoer ? tablet.Zubehoer : 'N/A'}</td>
+                        </tr>
+                    `;
+                });
+                
+                output += '</tbody></table>';
+                document.getElementById('outputAll').innerHTML = output;
+            },
+            error: function (xhr, status, error) {
+                console.error("Fehler beim Abrufen der Daten:", status, error);
+                document.getElementById('outputAll').innerHTML = `<p>Fehler: ${error}</p>`;
+            }
+        });
+    }
+
+    // Lade Daten beim Seitenaufruf
+    loadAllTablets();
 });
 
 </script>
