@@ -148,14 +148,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnSubmit = document.getElementById('submit-action');
     const formTitle = document.getElementById('form-title');
     const formContent = document.getElementById('form-content');
-    const output = document.getElementById('output-ipad');
-
+    const outputIPad = document.getElementById('output-ipad');
     let currentAction = '';
 
-    // Formular dynamisch erstellen
+    // Dynamisches Formular erstellen
     function updateForm(action) {
         currentAction = action;
-        formContent.innerHTML = ''; // Formular-Inhalte löschen
+        formContent.innerHTML = '';
         let formHTML = '';
 
         if (action === 'trennen') {
@@ -185,47 +184,74 @@ document.addEventListener('DOMContentLoaded', function () {
                     <input id="student-number" type="text" placeholder="Schüler-ID eingeben">
                     <label for="student-number">Schüler-ID</label>
                 </div>
+                <div class="input-field">
+                    <input id="ausgabe-datum" type="text" class="datepicker" placeholder="Ausgabe-Datum auswählen">
+                    <label for="ausgabe-datum">Ausgabe-Datum</label>
+                </div>
+                <div class="input-field">
+                    <input id="geplante-abgabe" type="text" class="datepicker" placeholder="Geplante Abgabe-Datum auswählen">
+                    <label for="geplante-abgabe">Geplante Abgabe-Datum</label>
+                </div>
             `;
         }
 
         formContent.innerHTML = formHTML;
-        initMaterialize(); // Initialisiere neu eingefügte Komponenten
+        initMaterialize(); // Reinitialisieren
     }
 
-    // Event-Listener für die Buttons
+    // Event-Listener für Buttons
     btnTrennen?.addEventListener('click', () => updateForm('trennen'));
     btnZuordnen?.addEventListener('click', () => updateForm('zuordnen'));
-    btnZustand?.addEventListener('click', () => updateForm('zustand'));
 
-    // Formular senden
+    // Formular senden im iPad-Verwalten-Tab
     btnSubmit?.addEventListener('click', function () {
         const ipadNumber = document.getElementById('ipad-number')?.value;
         const studentNumber = document.getElementById('student-number')?.value;
-        const abgabeDatum = document.getElementById('datepicker2')?.value;
 
         if (currentAction === 'trennen') {
+            const abgabeDatum = document.getElementById('datepicker2')?.value;
+
             if (!ipadNumber || !studentNumber || !abgabeDatum) {
                 alert("Bitte alle Felder ausfüllen!");
                 return;
             }
-            $.ajax({
-                url: 'ipadTrennen.php',
-                method: 'POST',
-                data: {
-                    tabletId: ipadNumber,
-                    schuelerId: studentNumber,
-                    abgabeDatum: abgabeDatum
-                },
-                success: function (response) {
-                    output.innerHTML = `<p>${response}</p>`;
-                },
-                error: function (xhr, status, error) {
-                    console.error("Fehler:", status, error);
-                    output.innerHTML = `<p>Fehler beim Trennen: ${error}</p>`;
-                }
-            });
+            sendRequest('ipadTrennen.php', { 
+                tabletId: ipadNumber, 
+                schuelerId: studentNumber, 
+                abgabeDatum 
+            }, outputIPad);
+        } else if (currentAction === 'zuordnen') {
+            const ausgabeDatum = document.getElementById('ausgabe-datum')?.value;
+            const geplanteAbgabe = document.getElementById('geplante-abgabe')?.value;
+
+            if (!ipadNumber || !studentNumber || !ausgabeDatum || !geplanteAbgabe) {
+                alert("Bitte alle Felder ausfüllen!");
+                return;
+            }
+            sendRequest('ipadZuordnen.php', { 
+                tabletId: ipadNumber, 
+                schuelerId: studentNumber, 
+                ausgabeDatum, 
+                geplanteAbgabe 
+            }, outputIPad);
         }
     });
+
+    // AJAX-Request senden
+    function sendRequest(url, data, outputContainer) {
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: data,
+            success: function (response) {
+                outputContainer.innerHTML = `<p>${response}</p>`;
+            },
+            error: function (xhr, status, error) {
+                console.error("Fehler:", status, error);
+                outputContainer.innerHTML = `<p>Fehler: ${error}</p>`;
+            }
+        });
+    }
 
     // History-Tab bleibt unangetastet
     const inputField = document.getElementById("search-input");
@@ -233,6 +259,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnSchueler = document.getElementById("btn-schueler");
     const btnIpad = document.getElementById("btn-ipad");
     const refreshButton = document.getElementById("refreshhistory");
+    const outputHistory = document.getElementById("output");
 
     let searchType = null;
 
@@ -260,22 +287,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const url = searchType === 'schueler' ? 'sushistory.php' : 'tablethistory.php';
-
-        $.ajax({
-            url: url,
-            method: 'POST',
-            data: { search: searchInput, date: datepicker },
-            success: function (response) {
-                document.getElementById("output").innerHTML = response;
-            },
-            error: function (xhr, status, error) {
-                console.error("Fehler bei AJAX:", status, error);
-            }
-        });
+        sendRequest(url, { search: searchInput, date: datepicker }, outputHistory);
     });
 });
-
-
 
 </script>
 </body>
