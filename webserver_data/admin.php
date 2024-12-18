@@ -39,21 +39,25 @@ include 'sessioncheck.php';
 
             <!-- Tab Content -->
             <div id="test-swipe-1" class="col s12 container deep-purple lighten-4 white-text swipeTabs">
-                <button>gestohlene/verlorene IPads</button>
-                <button>IPads mit gutem Zustand</button>
-                <button>IPads mit schlechtem Zustand</button>
-                <button>verliehene IPads</button>
-                <button>freie IPads</button>
-                <div class="input-field col s12">
-                    <select id="form-select-1">
-                        <option value="">alle Klassen</option>
-                    </select>
-                    <label for="form-select-1">IPads dieser Klasse anzeigen:</label>
-                </div>
-                <div>
-                    <button id="btn-refresh"><i class="material-icons">refresh</i></button>
-                </div>
-            </div>
+    <button id="btn-verloren" class="btn deep-purple darken-3">verlorene IPads</button>
+    <button id="btn-gut" class="btn deep-purple darken-3">IPads mit gutem Zustand</button>
+    <button id="btn-schlecht" class="btn deep-purple darken-3">IPads mit schlechtem Zustand</button>
+    <button id="btn-gebraucht" class="btn deep-purple darken-3">IPads mit gebrauchtem Zustand</button>
+    <button id="btn-verliehen" class="btn deep-purple darken-3">verliehene IPads</button>
+    <button id="btn-frei" class="btn deep-purple darken-3">freie IPads</button>
+
+    <div class="input-field col s12">
+        <select id="form-select-1">
+            <option value="">alle Klassen</option>
+        </select>
+        <label for="form-select-1">IPads dieser Klasse anzeigen:</label>
+    </div>
+    <div>
+        <button id="btn-refreshFilter" class="btn deep-purple darken-3"><i class="material-icons">refresh</i></button>
+    </div>
+    <div id="outputFilter" class="output-container" style="margin-top: 20px;"></div>
+</div>
+
 
             <div id="test-swipe-2" class="col s12 deep-purple lighten-4 white-text swipeTabs">
                 <button id="btn-schueler" class="btn deep-purple darken-3">Schüler oder Schülernummer</button>
@@ -334,6 +338,102 @@ document.addEventListener('DOMContentLoaded', function () {
                 select.appendChild(option);
             });
             M.FormSelect.init(document.querySelectorAll('select')); // Reinitialisieren von Materialize Select
+        },
+        error: function () {
+            console.error('Fehler beim Laden der Klassen.');
+        }
+    });
+    M.Tabs.init(document.querySelectorAll('.tabs'), { swipeable: true });
+    function initMaterialize() {
+        M.FormSelect.init(document.querySelectorAll('select'));
+        M.Datepicker.init(document.querySelectorAll('.datepicker'), {
+            format: 'yyyy-mm-dd',
+            autoClose: true
+        });
+        M.updateTextFields();
+    }
+    initMaterialize();
+
+    // Variablen für die Filter-Buttons
+    const btnVerloren = document.querySelector('button#btn-verloren');
+    const btnGut = document.querySelector('button#btn-gut');
+    const btnSchlecht = document.querySelector('button#btn-schlecht');
+    const btnGebraucht = document.querySelector('button#btn-gebraucht');
+    const btnVerliehen = document.querySelector('button#btn-verliehen');
+    const btnFrei = document.querySelector('button#btn-frei');
+    const btnRefreshFilter = document.getElementById('btn-refreshFilter');
+    const selectKlasse = document.getElementById('form-select-1');
+    const outputFilter = document.getElementById('outputFilter');
+    let currentFilter = { script: '', param: '' };
+
+    // Event-Listener für Buttons
+    btnVerloren?.addEventListener('click', () => setFilter('zustandAnzeigen.php', 'verloren'));
+    btnGut?.addEventListener('click', () => setFilter('zustandAnzeigen.php', 'gut'));
+    btnSchlecht?.addEventListener('click', () => setFilter('zustandAnzeigen.php', 'schlecht'));
+    btnGebraucht?.addEventListener('click', () => setFilter('zustandAnzeigen.php', 'gebraucht'));
+    btnVerliehen?.addEventListener('click', () => setFilter('statusAnzeigen.php', 'verliehen'));
+    btnFrei?.addEventListener('click', () => setFilter('statusAnzeigen.php', 'im Lager'));
+
+    btnRefreshFilter?.addEventListener('click', () => {
+        if (!currentFilter.script) {
+            alert("Bitte wähle zuerst einen Filter aus.");
+            return;
+        }
+        const klasse = selectKlasse.value || '';
+        sendRequest(currentFilter.script, currentFilter.param, klasse, outputFilter);
+    });
+
+    // Funktion zum Setzen des aktuellen Filters
+    function setFilter(script, param) {
+        currentFilter.script = script;
+        currentFilter.param = param;
+        outputFilter.innerHTML = `<p>Filter eingestellt: ${param}</p>`;
+    }
+
+    // AJAX-Request senden
+    function sendRequest(script, param, klasse, outputContainer) {
+        $.ajax({
+            url: script,
+            method: 'POST',
+            data: script === 'zustandAnzeigen.php' ? { zustand: param, klasse } : { status: param, klasse },
+            dataType: 'json',
+            success: function (response) {
+                if (response.error) {
+                    outputContainer.innerHTML = `<p>Fehler: ${response.error}</p>`;
+                } else if (response.length === 0) {
+                    outputContainer.innerHTML = '<p>Keine Daten gefunden.</p>';
+                } else {
+                    let output = '<div style="max-height: 300px; overflow-y: auto;"><table class="striped"><thead><tr>';
+                    Object.keys(response[0]).forEach(key => output += `<th>${key}</th>`);
+                    output += '</tr></thead><tbody>';
+                    response.forEach(row => {
+                        output += '<tr>';
+                        Object.values(row).forEach(value => output += `<td>${value}</td>`);
+                        output += '</tr>';
+                    });
+                    output += '</tbody></table></div>';
+                    outputContainer.innerHTML = output;
+                }
+            },
+            error: function (xhr, status, error) {
+                outputContainer.innerHTML = `<p>Fehler: ${error}</p>`;
+            }
+        });
+    }
+
+    // Dynamisch Klassen aus "klassen.php" laden
+    $.ajax({
+        url: 'Klassen.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            response.forEach(klasse => {
+                const option = document.createElement('option');
+                option.value = klasse.Klasse;
+                option.textContent = `Klasse ${klasse.Klasse}`;
+                selectKlasse.appendChild(option);
+            });
+            M.FormSelect.init(document.querySelectorAll('select')); // Materialize Select reinitialisieren
         },
         error: function () {
             console.error('Fehler beim Laden der Klassen.');
