@@ -47,9 +47,6 @@ include 'sessioncheck.php';
                 <div class="input-field col s12">
                     <select id="form-select-1">
                         <option value="">alle Klassen</option>
-                        <option value="1">Klasse</option>
-                        <option value="2">Klasse 1</option>
-                        <option value="3">Klasse 3</option>
                     </select>
                     <label for="form-select-1">IPads dieser Klasse anzeigen:</label>
                 </div>
@@ -315,6 +312,34 @@ document.addEventListener('DOMContentLoaded', function () {
             error: (xhr, status, error) => outputContainer.innerHTML = `<p>Fehler: ${error}</p>`
         });
     }
+        // Materialize-Komponenten initialisieren
+        M.Tabs.init(document.querySelectorAll('.tabs'), { swipeable: true });
+    M.FormSelect.init(document.querySelectorAll('select'));
+    M.Datepicker.init(document.querySelectorAll('.datepicker'), {
+        format: 'yyyy-mm-dd',
+        autoClose: true
+    });
+
+    // Dynamisch Klassen aus "klassen.php" laden
+    $.ajax({
+        url: 'Klassen.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function (response) {
+            const select = document.getElementById('form-select-1');
+            response.forEach(klasse => {
+                const option = document.createElement('option');
+                option.value = klasse.Klasse; 
+                option.textContent = `Klasse ${klasse.Klasse}`;
+                select.appendChild(option);
+            });
+            M.FormSelect.init(document.querySelectorAll('select')); // Reinitialisieren von Materialize Select
+        },
+        error: function () {
+            console.error('Fehler beim Laden der Klassen.');
+        }
+    });
+
 });
 
 
