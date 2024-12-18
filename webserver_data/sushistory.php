@@ -1,4 +1,5 @@
 <?php
+include 'jsonZugriff.php';
 include 'dbconnect.php';
 // Eingabewerte abrufen
 $schuelerId = isset($_POST['search']) ? intval($_POST['search']) : null; // Schüler ID aus POST

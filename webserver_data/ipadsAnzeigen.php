@@ -1,4 +1,5 @@
 <?php
+include 'jsonZugriff.php';
 include 'dbconnect.php';
 
 // SQL-Abfrage zur Prozedur "TabletAnzeige" aufrufen

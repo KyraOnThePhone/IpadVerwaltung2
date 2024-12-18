@@ -1,4 +1,5 @@
 <?php
+include 'jsonZugriff.php';
 include 'dbconnect.php';
 
 // Prozedur "Klassenanzeige" aufrufen
