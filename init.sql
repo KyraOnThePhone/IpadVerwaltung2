@@ -378,12 +378,27 @@ AS
 BEGIN
 SET NOCOUNT ON
  
-SELECT dbo.Tablet.ItemID as 'TabletID', dbo.Tablet.Modell, dbo.Tablet.Notiz, dbo.Tablet.Zustand, dbo.Tablet.Zubehoer, dbo.Schueler.Klasse
+SELECT dbo.Tablet.ItemID as 'TabletID', dbo.Tablet.Modell, dbo.Tablet.Notiz, dbo.Tablet.Zustand, dbo.Tablet.Status, dbo.Tablet.Zubehoer, dbo.Schueler.Klasse
 FROM  dbo.Ausgabe INNER JOIN
                          dbo.Schueler ON dbo.Ausgabe.SchuelerID = dbo.Schueler.PNr INNER JOIN
                          dbo.Tablet ON dbo.Ausgabe.TabletID = dbo.Tablet.ItemID
 
 WHERE dbo.Tablet.Status=@TStatus AND dbo.Schueler.Klasse=@Klasse
+ 
+END
+
+GO 
+
+ CREATE OR ALTER   PROCEDURE [dbo].[TabletStatus]
+(@TStatus varchar(50))
+AS
+BEGIN
+SET NOCOUNT ON
+ 
+SELECT dbo.Tablet.ItemID as 'TabletID', dbo.Tablet.Modell, dbo.Tablet.Notiz, dbo.Tablet.Zustand, dbo.Tablet.Status, dbo.Tablet.Zubehoer
+FROM dbo.Tablet
+
+WHERE dbo.Tablet.Status=@TStatus
  
 END
 
@@ -395,7 +410,7 @@ AS
 BEGIN
 SET NOCOUNT ON
  
-SELECT dbo.Tablet.ItemID as 'TabletID', dbo.Tablet.Modell, dbo.Tablet.Notiz, dbo.Tablet.Zustand, dbo.Tablet.Zubehoer, dbo.Schueler.Klasse
+SELECT dbo.Tablet.ItemID as 'TabletID', dbo.Tablet.Modell, dbo.Tablet.Notiz, dbo.Tablet.Zustand, dbo.Tablet.Status, dbo.Tablet.Zubehoer, dbo.Schueler.Klasse
 FROM  dbo.Ausgabe INNER JOIN
                          dbo.Schueler ON dbo.Ausgabe.SchuelerID = dbo.Schueler.PNr INNER JOIN
                          dbo.Tablet ON dbo.Ausgabe.TabletID = dbo.Tablet.ItemID
@@ -406,6 +421,19 @@ END
 
 
 GO
+
+ CREATE OR ALTER   PROCEDURE [dbo].[TabletZustand]
+(@TZustand varchar(50))
+AS
+BEGIN
+SET NOCOUNT ON
+ 
+SELECT dbo.Tablet.ItemID as 'TabletID', dbo.Tablet.Modell, dbo.Tablet.Notiz, dbo.Tablet.Zustand, dbo.Tablet.Status, dbo.Tablet.Zubehoer
+FROM dbo.Tablet
+
+WHERE dbo.Tablet.Zustand=@TZustand
+ 
+END
 
 Create OR ALTER       PROCEDURE [dbo].[TSL]
 (@TID int)
