@@ -4,17 +4,17 @@ Gruppenarbeit Sören, Larissa, Mischa, Kyra IN23 für Herr Trimkowski
 Links zu Hilfen und Doku:
 
 Wie setzt man das Projekt auf:
-https://1drv.ms/w/c/eef3a3deb2781862/ETaA5KX1KKhApoJaCT64jOQBlDRwmghd0m05cJAsn-8TBA?e=CJiA2z
+[https://1drv.ms/w/c/eef3a3deb2781862/ETaA5KX1KKhApoJaCT64jOQBlDRwmghd0m05cJAsn-8TBA?e=CJiA2z](https://1drv.ms/w/c/eef3a3deb2781862/ETaA5KX1KKhApoJaCT64jOQBO-B_1N-vXAVfdr88vMwXFw?e=b3poXe)
 
 Doku:
-https://1drv.ms/w/c/eef3a3deb2781862/EZ97EDrJ_kJJo12gtWMzGH0BwQK0Zr289wlcBTUIgQgAFg?e=QQEZtg
+[https://1drv.ms/w/c/eef3a3deb2781862/EZ97EDrJ_kJJo12gtWMzGH0BwQK0Zr289wlcBTUIgQgAFg?e=QQEZtg](https://1drv.ms/w/c/eef3a3deb2781862/EZ97EDrJ_kJJo12gtWMzGH0BaKifGllANSAsSZg7MYI8Cw?e=PoXyW4)
 
 Präsi:
-https://1drv.ms/p/c/eef3a3deb2781862/EadeZjHbn_xFrqos5hpUkXEBq6SHR824xhKAcLPuu_StUw?e=GCBZPb
+[https://1drv.ms/p/c/eef3a3deb2781862/EadeZjHbn_xFrqos5hpUkXEBq6SHR824xhKAcLPuu_StUw?e=GCBZPb](https://1drv.ms/p/c/eef3a3deb2781862/AadeZjHbn_xFrqos5hpUkXE?e=JpxdYP)
 
 Infomaterial:
 Docker: 
-https://1drv.ms/w/c/eef3a3deb2781862/Eb-Rsdfj-ERBhZc6rqjmBJcBK_Pemm3sQXHcoT-7pnnseg?e=0hrbDh
+[https://1drv.ms/w/c/eef3a3deb2781862/Eb-Rsdfj-ERBhZc6rqjmBJcBK_Pemm3sQXHcoT-7pnnseg?e=0hrbDh](https://1drv.ms/w/c/eef3a3deb2781862/Eb-Rsdfj-ERBhZc6rqjmBJcBIRv8FSxCrOEkIOZgqiOc4A?e=RAqQ3k)
 
 Container aufbauen (Docker muss installiert sein):
 1. gehe in den Pfad, in dem die Datei compose.yaml liegt. (cd <Pfad>)
@@ -56,20 +56,3 @@ Datenbank aufrufen (Dockercontainer muss dafür aktiv sein):
                             Port: 1433
                             Passwort: BratwurstIN23!
 
-
-To Do:
-
-- Datenbank:
-
-
-
-- UI:           - Login Seite mit Form
-                - Login Script
-                -            
-
-
-- Sonstiges:
-                - ein ERM bauen:
-                                das aktuelle ist kein ERM sondern ein relationales Datenbankmodell Ein ERM beschreibt die Beziehungen zwischen einzelnen Objekten OHNE sich dabei über die Tabellenstruktur gedanken zu machen. Dort findet man nur Entitäten, Attribute, Beziehungstypen und Kardinalitäten und dementsprechend KEINE Tabellen und Foreign Keys. Das relationale Datenbankmodell baut auf dem ERM
-                                auf und stellt die physische Struktur der Daten, innerhalb einer relationalen Datenbank dar. Die Elemente hierbei sind Tabellen, Spalten & Beziehungen durch Fremdschlüssel
-                                Bitte überarbeiten. Nur weil in Draw.io steht, dass die Symbole für ein ERM sind heißt es nicht dass es stimmt!
