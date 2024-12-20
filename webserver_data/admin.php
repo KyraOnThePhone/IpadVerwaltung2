@@ -7,7 +7,7 @@ include 'sessioncheck.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ipad Verwaltung</title>
-    <!-- Materialize CSS -->
+ 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="Adminstyle.css">
@@ -37,7 +37,7 @@ include 'sessioncheck.php';
                 <li class="tab col s3"><a href="#test-swipe-5">Alle IPads</a></li>
             </ul>
 
-            <!-- Tab Content -->
+            
             <div id="test-swipe-1" class="col s12 container deep-purple lighten-4 white-text swipeTabs">
     <button id="btn-verloren" class="btn deep-purple darken-3">verlorene IPads</button>
     <button id="btn-gut" class="btn deep-purple darken-3">IPads mit gutem Zustand</button>
@@ -102,7 +102,7 @@ include 'sessioncheck.php';
     <form id="ipad-form" style="margin-top: 20px;">
         <h5 id="form-title">Aktion auswählen</h5>
         <div id="form-content">
-            <!-- Eingabefelder werden hier dynamisch eingefügt -->
+            
         </div>
         <button id="submit-action" class="btn deep-purple darken-3" type="button">Aktion ausführen</button>
     </form>
@@ -127,7 +127,7 @@ include 'sessioncheck.php';
     </div>
 </footer>
 
-<!-- Materialize JS -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
@@ -157,9 +157,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let searchType = null;
     let currentFilter = { script: '', param: '' };
 
-    /**
-     * Universelle AJAX-Funktion für alle Tabs
-     */
+   
+     //Universelle AJAX-Funktion für alle Tabs
+    
     btnSubmit?.addEventListener('click', () => {
     const currentAction = formTitle.textContent.trim();
     let data = {}, url = '';
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else if (currentAction.includes('Zustand')) {
         const zustand = document.getElementById('zustand-select')?.value;
 
-        // URL basierend auf ausgewähltem Zustand
+        // URL geändert je nach ausgewähltem Zustand
         switch (zustand) {
             case 'gut':
                 url = 'zustandGut.php';
@@ -218,18 +218,18 @@ document.addEventListener('DOMContentLoaded', function () {
         url: url,
         method: 'POST',
         data: data,
-        dataType: 'json', // Serverantwort wird als JSON erwartet
+        dataType: 'json', // Serverantwort als JSON
         success: function (response) {
             console.log("Antwort erhalten:", response);
 
             if (response.success) {
-                // Erfolgsmeldung anzeigen
+                // Erfolgsmeldung
                 outputContainer.innerHTML = `<p>${response.success}</p>`;
             } else if (response.error) {
-                // Fehlermeldung anzeigen
+                // Fehlermeldung
                 outputContainer.innerHTML = `<p>Fehler: ${response.error}</p>`;
             } else if (Array.isArray(response) && response.length > 0) {
-                // JSON-Daten in eine HTML-Tabelle umwandeln
+                // JSON-Daten in HTML-Tabelle umwandeln
                 let tableHTML = '<table class="striped centered"><thead><tr>';
                 Object.keys(response[0]).forEach(key => {
                     tableHTML += `<th>${key}</th>`;
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Tabelle in den Container einfügen
                 outputContainer.innerHTML = tableHTML;
             } else {
-                // Keine Daten gefunden
+               
                 outputContainer.innerHTML = '<p>Keine Daten gefunden.</p>';
             }
         },
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 
 
-    // **History-Tab Logik**
+    // History-Tab Logik
     document.getElementById("btn-schueler")?.addEventListener("click", () => setupSearch('schueler', "Schülernummer eingeben..."));
     document.getElementById("btn-ipad")?.addEventListener("click", () => setupSearch('ipad', "iPad-Nummer eingeben..."));
     refreshHistoryBtn?.addEventListener("click", () => {
@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function () {
         inputField.placeholder = placeholder;
     }
 
-    // **Filter-Buttons**
+    //Filter-Buttons
     document.querySelectorAll('#btn-verloren, #btn-gut, #btn-schlecht, #btn-gebraucht, #btn-verliehen, #btn-frei')
         .forEach(button => {
             button.addEventListener('click', () => {
@@ -299,10 +299,10 @@ document.addEventListener('DOMContentLoaded', function () {
         sendRequest(currentFilter.script, { zustand: currentFilter.param, klasse: selectKlasse.value }, outputFilter);
     });
 
-    // **Alle IPads anzeigen**
+    //Alle IPads anzeigen
     sendRequest('ipadsAnzeigen.php', {}, outputAll);
 
-    // **Dynamisches iPad-Verwalten-Formular**
+    //Dynamisches iPad-Verwalten-Formular
     const formContent = document.getElementById('form-content');
     const formTitle = document.getElementById('form-title');
     document.getElementById('btn-trennen')?.addEventListener('click', () => updateForm('trennen'));
@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
         initMaterialize();
     }
 
-    // **Dynamisch Klassen laden**
+    //Dynamisch Klassen laden
     $.ajax({
         url: 'Klassen.php',
         method: 'GET',
