@@ -435,6 +435,8 @@ WHERE dbo.Tablet.Zustand=@TZustand
  
 END
 
+GO
+
 Create OR ALTER       PROCEDURE [dbo].[TSL]
 (@TID int)
 AS

@@ -9,6 +9,9 @@ https://1drv.ms/w/c/eef3a3deb2781862/ETaA5KX1KKhApoJaCT64jOQBlDRwmghd0m05cJAsn-8
 Doku:
 https://1drv.ms/w/c/eef3a3deb2781862/EZ97EDrJ_kJJo12gtWMzGH0BwQK0Zr289wlcBTUIgQgAFg?e=QQEZtg
 
+Präsi:
+https://1drv.ms/p/c/eef3a3deb2781862/EadeZjHbn_xFrqos5hpUkXEBq6SHR824xhKAcLPuu_StUw?e=GCBZPb
+
 Infomaterial:
 Docker: 
 https://1drv.ms/w/c/eef3a3deb2781862/Eb-Rsdfj-ERBhZc6rqjmBJcBK_Pemm3sQXHcoT-7pnnseg?e=0hrbDh
