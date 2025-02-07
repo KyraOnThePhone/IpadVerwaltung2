@@ -21,7 +21,7 @@ Container aufbauen (Docker muss installiert sein):
 2. gebe folgenden Befehl an: sudo docker compose up -d
 
 Troubleshoot sqlsrv & php :
-nano /etc/php83/ini.php
+nano /etc/php83/php.ini
 folgendes einfügen:
 extension_dir = "/usr/local/lib/php/extensions/no-debug-non-zts-20230831"
 schließen mit strg+s und strg+x
